@@ -13,24 +13,29 @@ class InMemoryDatabase {
     }
 
 
-    createUser(email: string, password: string) {
+    async createUser(email: string, password: string): Promise<DbUser> {
 
         const id = ++this.userCounter;
 
-        argon2.hash(password).then( passwordDigest => {
-          const user: DbUser = {
-            id,
-            email,
-            passwordDigest
-          };
+        try {
+          return await argon2.hash(password).then(passwordDigest => {
+            const user: DbUser = {
+              id,
+              email,
+              passwordDigest
+            };
 
-          USERS[id] = user;
+            USERS[id] = user;
 
-          return user;
-        }).catch(reason => {
+            return user;
+          }).catch(reason => {
+            console.error("Error generating password hash: " + reason);
+            return null;
+          });
+        } catch (reason) {
           console.error("Error generating password hash: " + reason);
           return null;
-        });
+        }
     }
 
 }

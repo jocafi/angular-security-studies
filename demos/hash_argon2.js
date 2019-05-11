@@ -6,7 +6,6 @@ var password = 'monkey';
 
 async function createHash() {
   try {
-// we will use another hash other SHA-256 during the course, this is just for demo purposes
     var hash = await crypto.hash(password).then(passwordDigest => {
       console.log("The result of hashing " + password + " is:\n\n" + passwordDigest + "\n\n");
     }).catch(reason => console.error("Error generating password hash: " + reason))
@@ -18,4 +17,4 @@ async function createHash() {
 
 createHash();
 
-// You should see in the console 000c285457fc971f862a79b786476c78812c8897063c6fa9c045f579a3b2d63f
+// You should see in the console $argon2i$v=19$m=4096,t=3,p=1$dO1S8Mv2FpjU18qBu3BnGQ$BovV2AkIQahrBTePHS2HVT9Ua8U8A/MHJvAhx+Gl1IM
