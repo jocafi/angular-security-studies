@@ -1,3 +1,16 @@
+
+<div class="messages messages-error" *ngIf="errors?.length">
+  <div class="messages-container">
+    <div *ngFor="let error of errors">{{messagePerErrorCode[error]}}</div>
+  </div>
+</div>
+
+<div class="messages messages-success" *ngIf="userCreatedWithSucess">
+  <div class="messages-container">
+    <p>User created successfully!</p>
+  </div>
+</div>
+
 <form autocomplete="off" novalidate  [formGroup]="form">
 
     <fieldset>
