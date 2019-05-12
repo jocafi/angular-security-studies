@@ -7,12 +7,17 @@ import * as https from "https";
 import {readAllLessons} from "./read-all-lessons.route";
 import { AddressInfo } from "net";
 import { createUser } from "./create-user.route";
+import { getUser } from "./get-user.route";
+import { logout } from "./logout.route";
+import { login } from "./login.route";
 
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
 const app: Application = express();
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 const commandLineArgs = require("command-line-args");
 
@@ -26,12 +31,20 @@ const options = commandLineArgs(optionDefinitions);
 console.log("Options: %o", options);
 
 // REST API
+app.route("/api/user")
+  .get(getUser);
+
 app.route("/api/lessons")
   .get(readAllLessons);
 
 app.route("/api/signup")
   .post(createUser);
 
+app.route("/api/logout")
+  .post(logout);
+
+app.route("/api/login")
+  .post(login);
 
 
 if (options.secure) {

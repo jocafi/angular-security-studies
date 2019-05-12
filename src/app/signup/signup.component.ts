@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services/auth.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-signup",
@@ -25,7 +26,9 @@ export class SignupComponent implements OnInit {
   };
 
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder,
+              private authService: AuthService,
+              private router: Router) {
     this.form = this.fb.group({
       email: ["test@gmail.com", Validators.required],
       password: ["Password10", Validators.required],
@@ -50,6 +53,7 @@ export class SignupComponent implements OnInit {
             console.log("User created successfully");
             this.errors = [];
             this.userCreatedWithSucess = true;
+            this.router.navigateByUrl("/");
           },
           response => this.errors = response.error.errors
         );
