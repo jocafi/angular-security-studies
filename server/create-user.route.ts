@@ -39,7 +39,7 @@ export async function createUserAndSession(res: Response, credentials) {
       res.status(500).json({ errors: errMesg });
     }
 
-    userService.createSessionAndBuildResponse(res, user);
+    userService.createSessionTokenAndBuildResponse(res, user);
 
   });
 }

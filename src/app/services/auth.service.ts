@@ -14,7 +14,7 @@ export const ANONYMOUS_USER: User = {
 })
 export class AuthService {
 
-  private subject = new BehaviorSubject<User>(undefined);
+  private subject = new BehaviorSubject<User>(ANONYMOUS_USER);
 
   user$: Observable<User> = this.subject.asObservable().pipe(
     filter(user => !!user)

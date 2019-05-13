@@ -10,14 +10,18 @@ import { createUser } from "./create-user.route";
 import { getUser } from "./get-user.route";
 import { logout } from "./logout.route";
 import { login } from "./login.route";
+import { retrieveUserInfoFromRequest } from "./get-user.middleware";
+import { checkIfAuthenticated } from "./auth.middleware";
 
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
 const app: Application = express();
 
-app.use(bodyParser.json());
+// *JA* the order of the middleware is important due to dependencies among them
 app.use(cookieParser());
+app.use(retrieveUserInfoFromRequest);
+app.use(bodyParser.json());
 
 const commandLineArgs = require("command-line-args");
 
@@ -34,14 +38,15 @@ console.log("Options: %o", options);
 app.route("/api/user")
   .get(getUser);
 
+// *JA* checkIfAuthenticated works like a middleware, however only for this route
 app.route("/api/lessons")
-  .get(readAllLessons);
+  .get(checkIfAuthenticated, readAllLessons);
 
 app.route("/api/signup")
   .post(createUser);
 
 app.route("/api/logout")
-  .post(logout);
+  .post(checkIfAuthenticated, logout);
 
 app.route("/api/login")
   .post(login);

@@ -31,7 +31,7 @@ async function attemptLogin(res: Response, credentials: any, user: DbUser) {
     throw new Error("Password incorrect");
   }
 
-  userService.createSessionAndBuildResponse(res, user);
+  userService.createSessionTokenAndBuildResponse(res, user);
 
   console.log("Login sucessful for user", user.email);
 }
