@@ -1,4 +1,6 @@
-<div class="lessons-list-container v-h-center-block-parent" *ngIf="isLoggedIn$ | async">
+<h2>Test:  {{auth.isLoggedIn() }}</h2>
+
+<div class="lessons-list-container v-h-center-block-parent" *ngIf="auth.isLoggedIn()">
 
   <h2>All Lessons</h2>
 
@@ -13,6 +15,5 @@
     </tr>
     </tbody>
   </table>
-
 
 </div>

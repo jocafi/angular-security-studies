@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import { LESSONS, USERS } from "./database-data";
 import { DbUser } from "./db-user";
-import * as argon2 from "argon2";
+
 
 class InMemoryDatabase {
 
@@ -11,7 +11,8 @@ class InMemoryDatabase {
     return _.values(LESSONS);
   }
 
-  validateUser(email: string) {
+  createUser(email: string, authenticationId) {
+
     const usersPerEmail = _.keyBy(_.values(USERS), "email");
 
     if (usersPerEmail[email]) {
@@ -19,33 +20,24 @@ class InMemoryDatabase {
       console.error(message);
       throw new Error(message);
     }
+
+    this.userCounter++;
+
+    const id = this.userCounter;
+
+    const user: DbUser = {
+      id,
+      email,
+      authenticationId
+    };
+
+    USERS[id] = user;
+
+    console.log(USERS);
+
+    return user;
   }
 
-  async createUser(email: string, password: string): Promise<DbUser> {
-
-    const id = ++this.userCounter;
-
-    try {
-      return await argon2.hash(password).then(passwordDigest => {
-        const user: DbUser = {
-          id,
-          email,
-          passwordDigest
-        };
-
-        USERS[id] = user;
-
-        return user;
-      }).catch(this.errorOnHash);
-    } catch (reason) {
-      this.errorOnHash(reason);
-    }
-  }
-
-  errorOnHash(reason) {
-    console.error("Error generating password hash: " + reason);
-    return null;
-  }
 
   findUserByEmail(email: string): DbUser {
 
@@ -53,7 +45,6 @@ class InMemoryDatabase {
 
     return _.find(users, user => user.email === email);
   }
-
 
   findUserById(userId: string): DbUser {
 
@@ -65,7 +56,7 @@ class InMemoryDatabase {
 
       const users = _.values(USERS);
 
-      user = _.find(users, user1 => user1.id.toString() === userId);
+      user = _.find(users, user => user.id.toString() === userId);
 
       console.log("user data found:", user);
     }
@@ -73,6 +64,28 @@ class InMemoryDatabase {
     return user;
 
   }
+
+
+  findUserByAuthenticationId(authenticationId: string) {
+    let user = undefined;
+
+    if (authenticationId) {
+
+      console.log("looking for user with authenticationId = ", authenticationId);
+
+      const users = _.values(USERS);
+
+      user = _.find(users, user => user.authenticationId === authenticationId);
+
+      console.log("user data found:", user);
+    }
+
+    return user;
+  }
+
 }
 
+
 export const db = new InMemoryDatabase();
+
+

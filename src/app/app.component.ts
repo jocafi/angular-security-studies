@@ -9,18 +9,24 @@ import { Observable } from "rxjs";
 })
 export class AppComponent implements OnInit {
 
-  isLoggedIn$: Observable<boolean>;
-  isLoggedOut$: Observable<boolean>;
+  constructor(private auth: AuthService) {
 
-  constructor(private authService: AuthService) {
   }
 
-  ngOnInit(): void {
-    this.isLoggedIn$ = this.authService.isLoggedIn$;
-    this.isLoggedOut$ = this.authService.isLoggedOut$;
+  ngOnInit() {
+    this.auth.retrieveAuthInfoFromUrl();
+  }
+
+  signUp() {
+    this.auth.signUp();
+  }
+
+  login() {
+    this.auth.login();
+
   }
 
   logout() {
-    this.authService.logout().subscribe();
+    this.auth.logout();
   }
 }
