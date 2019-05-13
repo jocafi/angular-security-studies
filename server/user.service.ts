@@ -2,7 +2,7 @@ import { sessionStore } from "./session-store";
 import { DbUser } from "./db-user";
 import { Response } from "express";
 import { Session } from "./session";
-import { createSessionToken } from "./security.utils";
+import { createCsrfToken, createSessionToken } from "./security.utils";
 
 
 class UserService {
@@ -36,6 +36,13 @@ class UserService {
     // httpOnly = true avoids that an attacker can set the SESSIONID using the browser console or JS on the browser
     // Ex.: document.cookie="SESSIONID=90def404ef406faaa001737011203512ea744405e2b8e664f97dcbfd07bac207"
     res.cookie("SESSIONID", sessionToken, { httpOnly: true, secure: true });
+
+    const csrfToken = await createCsrfToken();
+
+    console.log("csrf token created:", csrfToken);
+
+    // Add a 2nd cookie against CSRF attacks
+    res.cookie("XSRF-TOKEN", csrfToken);
 
     res.status(200).json({ id: user.id, email: user.email });
   }

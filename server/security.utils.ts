@@ -4,8 +4,6 @@ import * as jwt from "jsonwebtoken";
 import * as fs from "fs";
 
 
-export const randomBytes = util.promisify(crypto.randomBytes);
-
 export const signJwt = util.promisify(jwt.sign);
 
 
@@ -29,4 +27,9 @@ export async function decodeJwt(token: string) {
   const payload = await jwt.verify(token, RSA_PUBLIC_KEY);
   console.log("decode JWT payload:", payload);
   return payload;
+}
+
+export function createCsrfToken() {
+  const csrfToken = crypto.randomBytes(32).toString("hex");
+  return csrfToken;
 }

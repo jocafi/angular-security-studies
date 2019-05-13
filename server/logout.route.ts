@@ -10,6 +10,7 @@ export function logout(req: Request, res: Response) {
 
     sessionStore.destroySession(sessionId);
     res.clearCookie("SESSIONID");
+    res.clearCookie("XSRF-TOKEN");
     res.status(200).json({message: "Logout Successful"});
   } else {
     console.log("Session not found: ", sessionId);

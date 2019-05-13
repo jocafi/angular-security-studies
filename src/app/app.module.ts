@@ -4,7 +4,7 @@ import { NgModule } from "@angular/core";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HttpClientXsrfModule } from "@angular/common/http";
 import { SignupComponent } from "./signup/signup.component";
 import { LoginComponent } from "./login/login.component";
 import { LessonsComponent } from "./lessons/lessons.component";
@@ -21,6 +21,10 @@ import { LessonsService } from "./services/lessons.service";
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    HttpClientXsrfModule.withOptions({
+      cookieName: "XSRF-TOKEN",
+      headerName: "x-xsrf-token"
+    }),
     ReactiveFormsModule
   ],
   providers: [LessonsService],

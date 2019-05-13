@@ -12,6 +12,7 @@ import { logout } from "./logout.route";
 import { login } from "./login.route";
 import { retrieveUserInfoFromRequest } from "./get-user.middleware";
 import { checkIfAuthenticated } from "./auth.middleware";
+import { checkCsrfToken } from "./csrf.middleware";
 
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -46,7 +47,7 @@ app.route("/api/signup")
   .post(createUser);
 
 app.route("/api/logout")
-  .post(checkIfAuthenticated, logout);
+  .post(checkIfAuthenticated, checkCsrfToken, logout);
 
 app.route("/api/login")
   .post(login);

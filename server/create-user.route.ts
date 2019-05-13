@@ -22,7 +22,8 @@ export function createUser(req: Request, res: Response) {
       return;
     }
 
-    createUserAndSession(res, credentials);
+    createUserAndSession(res, credentials)
+      .catch(() => res.sendStatus(500));
   }
 
 }
